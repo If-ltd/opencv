@@ -1,0 +1,6 @@
+{
+  "name": "opencv",
+  "version": "4.10.0",
+  "source": "https://github.com/opencv/opencv",
+  "gitHead": "71d3237a093b60a27601c20e9ee6c3e52154e8b1"
+}
