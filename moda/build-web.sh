@@ -11,11 +11,11 @@ python3 "$source_dir/platforms/js/build_js.py" "$build_dir" \
   --simd \
   --config "$source_dir/moda/opencv_js_minimal.config.py" \
   --build_flags="-sEXPORT_ES6 -sENVIRONMENT=web,worker " \
-  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-  -DBUILD_LIST=core,imgproc,photo,js \
-  -DBUILD_EXAMPLES=OFF \
-  -DBUILD_TESTS=OFF \
-  -DBUILD_PERF_TESTS=OFF
+  --cmake_option=-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+  --cmake_option=-DBUILD_LIST=core,imgproc,photo,js \
+  --cmake_option=-DBUILD_EXAMPLES=OFF \
+  --cmake_option=-DBUILD_TESTS=OFF \
+  --cmake_option=-DBUILD_PERF_TESTS=OFF
 
 # The upstream build also writes a UMD wrapper. The raw ES module is the browser artifact.
 cp "$build_dir/bin/opencv_js.js" "$build_dir/opencv-web.mjs"
