@@ -1,0 +1,32 @@
+name: Publish the Web OpenCV build
+
+on:
+  push:
+    tags: ['v4.10.0-web.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build OpenCV.js and WASM
+        run: |
+          mkdir "$RUNNER_TEMP/opencv"
+          docker run --rm \
+            --volume "$GITHUB_WORKSPACE:/src:ro" \
+            --volume "$RUNNER_TEMP/opencv:/build" \
+            emscripten/emsdk:3.1.64 \
+            bash /src/moda/build-web.sh /build
+      - name: Verify Web OpenCV bindings
+        run: node moda/check-web.mjs "$RUNNER_TEMP/opencv/opencv-web.mjs"
+      - name: Publish the Web artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "$RUNNER_TEMP/opencv/opencv-web.mjs" LICENSE \
+            --verify-tag --prerelease --latest=false \
+            --notes "Browser and Web Worker build from $GITHUB_SHA"
